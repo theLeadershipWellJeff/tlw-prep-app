@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { TLWLogo } from '../components/TLWLogo'
+import { TLWLogo } from '../../components/TLWLogo'
 import type { PrepContent } from '@/lib/email-template'
 
 type Step = 'loading-notes' | 'generating' | 'edit' | 'sending' | 'sent' | 'error'
