@@ -87,12 +87,14 @@ export default function SessionPage() {
     tag = 'div',
     className = '',
     multiline = true,
+    style,
   }: {
     value: string
     onChange: (v: string) => void
     tag?: keyof JSX.IntrinsicElements
     className?: string
     multiline?: boolean
+    style?: React.CSSProperties
   }) {
     const ref = useRef<HTMLElement>(null)
 
@@ -109,6 +111,7 @@ export default function SessionPage() {
         contentEditable
         suppressContentEditableWarning
         className={`${className} relative group`}
+        style={style}
         onBlur={(e: React.FocusEvent<HTMLDivElement>) => onChange(e.currentTarget.textContent || '')}
         onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
           if (!multiline && e.key === 'Enter') e.preventDefault()
