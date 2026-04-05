@@ -6,7 +6,7 @@ import type { PrepContent } from '@/lib/email-template'
 
 type Step = 'loading-notes' | 'generating' | 'edit' | 'sending' | 'sent' | 'error'
 
-export default function SessionPage() {
+function SessionPage() {
   const params = useSearchParams()
   const router = useRouter()
 
@@ -375,5 +375,15 @@ export default function SessionPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+import { Suspense } from 'react'
+
+export default function SessionPageWrapper() {
+  return (
+    <Suspense fallback={<div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh',background:'#111226',color:'#F2F2F0'}}>Loading...</div>}>
+      <SessionPage />
+    </Suspense>
   )
 }
