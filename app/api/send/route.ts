@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { google } from 'googleapis'
-import { authOptions } from '../auth/route'
+import { authOptions } from '@/lib/authOptions'
 import { buildClientEmailHTML } from '@/lib/email-template'
 
 function makeRawEmail(to: string, cc: string, subject: string, body: string, isHTML: boolean) {
