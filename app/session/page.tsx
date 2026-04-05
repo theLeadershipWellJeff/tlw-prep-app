@@ -110,7 +110,7 @@ export default function SessionPage() {
         suppressContentEditableWarning
         className={`${className} relative group`}
         onBlur={(e: React.FocusEvent<HTMLDivElement>) => onChange(e.currentTarget.textContent || '')}
-        onKeyDown={e => {
+        onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
           if (!multiline && e.key === 'Enter') e.preventDefault()
         }}
       />
