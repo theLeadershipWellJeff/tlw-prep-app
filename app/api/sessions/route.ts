@@ -62,7 +62,7 @@ export async function GET(req: NextRequest) {
         end: e.end?.dateTime || e.end?.date,
         clientName: client?.displayName || extractNameFromTitle(e.summary || ''),
         clientEmail: client?.email || '',
-        duration: getDuration(e.start?.dateTime, e.end?.dateTime),
+        duration: getDuration(e.start?.dateTime ?? undefined, e.end?.dateTime ?? undefined),
         meetLink: e.hangoutLink || e.location || '',
       }
     })
