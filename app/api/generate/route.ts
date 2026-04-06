@@ -6,8 +6,8 @@ const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 export async function POST(req: NextRequest) {
   const { clientName, notes, actions } = await req.json()
 
-  if (!clientName || !notes?.length) {
-    return NextResponse.json({ error: 'clientName and notes required' }, { status: 400 })
+  if (!clientName) {
+    return NextResponse.json({ error: 'clientName required' }, { status: 400 })
   }
 
   const notesText = notes
