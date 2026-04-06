@@ -33,7 +33,9 @@ export async function GET(req: NextRequest) {
   // If we have a name but not an ID, look up the client
   if (!resolvedClientId && clientName) {
     const clientRes = await fetch(`${CA_BASE}/clients`, { headers })
-    const clients = await clientRes.json()
+    const clientText = await clientRes.text()
+    console.log('CA clients raw:', clientText.substring(0, 200))
+    const clients = JSON.parse(clientText)
     const match = clients.find((c: any) => {
       const fullName = `${c.firstName} ${c.lastName}`.toLowerCase()
       return fullName.includes(clientName.toLowerCase())
