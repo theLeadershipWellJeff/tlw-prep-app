@@ -31,28 +31,87 @@ export async function GET(req: NextRequest) {
 
   const events = res.data.items || []
 
-  // Filter for likely coaching sessions (1:1 events with attendees)
+  // Pull CA client roster for name matching
+  let caClients: any[] = []
+  try {
+    const caRes = await fetch(`${process.env.COACH_ACCOUNTABLE_BASE_URL}/clients`, {
+      headers: { 'X-API-Key': process.env.COACH_ACCOUNTABLE_API_KEY! }
+    })
+    caClients = await caRes.json()
+  } catch (e) {
+    console.error('Failed to fetch CA clients', e)
+  }
+
+  const jeffEmails = [
+    (process.env.JEFF_FROM_EMAIL || '').toLowerCase(),
+    (process.env.JEFF_CC_EMAIL || '').toLowerCase(),
+  ]
+
+  function matchClientFromTitle(title: string): { name: string; email: string } | null {
+    const t = title.toLowerCase()
+    for (const c of caClients) {
+      const first = (c.firstName || '').toLowerCase()
+      const last = (c.lastName || '').toLowerCase()
+      const full = `${first} ${last}`
+      if (
+        t.includes(full) ||
+        t.includes(first) ||
+        t.includes(last)
+      ) {
+        return {
+          name: `${c.firstName} ${c.lastName}`.trim(),
+          email: c.email || '',
+        }
+      }
+    }
+    return null
+  }
+
+  function extractNameFromTitle(title: string): string {
+    const patterns = [
+      /^(.+?)\s+and\s+(?:dr\.?\s*jeff|jeff)/i,
+      /^(.+?):\s*\d+\s*min/i,
+      /^(.+?)\s*[-:]\s*(?:coaching|session|1:1|tlw)/i,
+      /(?:coaching|session|1:1|tlw)\s*[-:]\s*(.+)/i,
+    ]
+    for (const pattern of patterns) {
+      const match = title.match(pattern)
+      if (match) return match[1].trim()
+    }
+    return title
+  }
+
   const sessions = events
     .filter(e => {
-      const title = (e.summary || '').toLowerCase()
+      if (!e.summary) return false
+      const title = e.summary.toLowerCase()
       const hasAttendees = (e.attendees?.length || 0) > 1
-      // Flag events that look like coaching sessions
+
+      // Match against CA client names
+      const caMatch = matchClientFromTitle(e.summary)
+      if (caMatch) return true
+
+      // Match attendees not Jeff
+      const nonJeffAttendee = e.attendees?.find(
+        a => !jeffEmails.includes((a.email || '').toLowerCase())
+      )
+      if (nonJeffAttendee) return true
+
+      // Match common coaching keywords
       const isCoaching =
         title.includes('coaching') ||
         title.includes('session') ||
         title.includes('1:1') ||
         title.includes('tlw') ||
-        hasAttendees
+        title.includes('dr. jeff') ||
+        title.includes('dr jeff')
+
       return isCoaching
     })
     .map(e => {
-      // Extract client name from attendees (not jeff's email)
-      const jeffEmails = [
-        process.env.JEFF_FROM_EMAIL,
-        process.env.JEFF_CC_EMAIL,
-      ]
-      const client = e.attendees?.find(
-        a => !jeffEmails.includes(a.email || '')
+      const caMatch = matchClientFromTitle(e.summary || '')
+      const nonJeffAttendee = e.attendees?.find(
+        a => !jeffEmails.includes((a.email || '').toLowerCase())
       )
 
       return {
@@ -60,29 +119,14 @@ export async function GET(req: NextRequest) {
         title: e.summary,
         start: e.start?.dateTime || e.start?.date,
         end: e.end?.dateTime || e.end?.date,
-        clientName: client?.displayName || extractNameFromTitle(e.summary || ''),
-        clientEmail: client?.email || '',
+        clientName: caMatch?.name || nonJeffAttendee?.displayName || extractNameFromTitle(e.summary || ''),
+        clientEmail: caMatch?.email || nonJeffAttendee?.email || '',
         duration: getDuration(e.start?.dateTime ?? undefined, e.end?.dateTime ?? undefined),
         meetLink: e.hangoutLink || e.location || '',
       }
     })
 
   return NextResponse.json({ sessions })
-}
-
-function extractNameFromTitle(title: string): string {
-  // Try to extract a client name from event titles like "Coaching - Lisa Fischer"
-  const patterns = [
-    /coaching[:\s-]+(.+)/i,
-    /session[:\s-]+(.+)/i,
-    /1:1[:\s-]+(.+)/i,
-    /tlw[:\s-]+(.+)/i,
-  ]
-  for (const pattern of patterns) {
-    const match = title.match(pattern)
-    if (match) return match[1].trim()
-  }
-  return title
 }
 
 function getDuration(start?: string, end?: string): number {
