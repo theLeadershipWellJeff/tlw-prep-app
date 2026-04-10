@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="bg-navy-deep min-h-screen text-cream font-sans antialiased">
+      <body className="min-h-screen font-sans antialiased" style={{background:"#DDD9D3",color:"#111226"}}>
         {children}
       </body>
     </html>
