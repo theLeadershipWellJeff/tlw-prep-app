@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
   let actions: any[] = []
 
   try {
-    const rawNotes = await caPost('SessionNote.getAll', {
+    const rawNotes = await caPost('Session.getAll', {
       ClientID: resolvedClientId!,
       dateFrom,
     })
