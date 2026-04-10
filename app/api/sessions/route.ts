@@ -34,6 +34,9 @@ export async function GET(req: NextRequest) {
   // Pull CA client roster for name matching
   let caClients: any[] = []
   try {
+    console.log('CA URL:', process.env.COACH_ACCOUNTABLE_BASE_URL)
+    console.log('CA KEY length:', process.env.COACH_ACCOUNTABLE_API_KEY?.length)
+    console.log('CA KEY start:', process.env.COACH_ACCOUNTABLE_API_KEY?.substring(0,8))
     const caRes = await fetch(`${process.env.COACH_ACCOUNTABLE_BASE_URL}/clients`, {
       headers: { 'X-API-Key': process.env.COACH_ACCOUNTABLE_API_KEY! }
     })
