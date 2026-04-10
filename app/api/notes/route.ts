@@ -32,7 +32,11 @@ export async function GET(req: NextRequest) {
 
   // If we have a name but not an ID, look up the client
   if (!resolvedClientId && clientName) {
+    console.log('CA_BASE:', CA_BASE)
+    console.log('CA_KEY length:', CA_KEY?.length)
+    console.log('CA_KEY prefix:', CA_KEY?.substring(0, 6))
     const clientRes = await fetch(`${CA_BASE}/clients`, { headers })
+    console.log('CA status:', clientRes.status)
     const clientText = await clientRes.text()
     console.log('CA clients raw:', clientText.substring(0, 200))
     const clients = JSON.parse(clientText)
