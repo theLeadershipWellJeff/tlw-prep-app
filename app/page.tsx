@@ -77,7 +77,7 @@ export default function Dashboard() {
     <div className="min-h-screen p-8 max-w-3xl mx-auto">
       {/* Header */}
       <div className="flex items-center gap-4 mb-10">
-        <TLWLogo size={40} light />
+        <TLWLogo size={40} light onClick={() => router.push("/")} style={{cursor:"pointer"}} />
         <div>
           <p className="text-gray-warm text-[9px] tracking-[4px] uppercase">theLeadershipWell</p>
           <h1 className="font-serif text-2xl font-light text-cream">Session Prep Engine</h1>
@@ -122,16 +122,16 @@ export default function Dashboard() {
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="font-semibold text-cream text-base">{session.clientName}</p>
-                    <p className="text-gray-warm text-xs mt-1">{session.clientEmail}</p>
+                    <p className="font-semibold text-espresso text-base">{session.clientName}</p>
+                    <p className="text-espresso/70 text-xs mt-1">{session.clientEmail}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-cream text-sm">{formatDate(session.start)}</p>
-                    <p className="text-gray-warm text-xs mt-0.5">{formatTime(session.start)} · {session.duration} min</p>
+                    <p className="text-espresso text-sm font-medium">{formatDate(session.start)}</p>
+                    <p className="text-espresso/60 text-xs mt-0.5">{formatTime(session.start)} · {session.duration} min</p>
                   </div>
                 </div>
                 <div className="mt-4 flex items-center justify-between">
-                  <p className="text-gray-warm text-xs truncate">{session.title}</p>
+                  <p className="text-espresso/60 text-xs truncate">{session.title}</p>
                   <span className="text-[9px] tracking-[3px] uppercase text-gray-warm group-hover:text-cream transition-colors ml-4 whitespace-nowrap">
                     Generate Prep →
                   </span>

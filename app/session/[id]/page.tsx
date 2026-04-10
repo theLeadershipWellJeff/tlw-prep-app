@@ -213,7 +213,7 @@ function SessionPage() {
       {/* Top bar */}
       <div className="sticky top-0 z-50 bg-navy-deep/95 backdrop-blur border-b border-gray-warm/20 px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <TLWLogo size={28} light />
+          <TLWLogo size={28} light onClick={() => router.push("/")} style={{cursor:"pointer"}} />
           <div>
             <p className="text-cream text-sm font-semibold">{clientName}</p>
             <p className="text-gray-warm text-xs">{clientEmail}</p>
@@ -221,6 +221,12 @@ function SessionPage() {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-gray-warm text-xs hidden sm:block">Click any field to edit</span>
+          <button
+            onClick={() => router.push('/')}
+            className="px-4 py-2 text-xs text-gray-warm border border-gray-warm/30 rounded-lg hover:text-cream transition-colors"
+          >
+            ← Dashboard
+          </button>
           <button
             onClick={run}
             className="px-4 py-2 text-xs text-gray-warm border border-gray-warm/30 rounded-lg hover:text-cream transition-colors"
