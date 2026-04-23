@@ -117,21 +117,21 @@ export default function Dashboard() {
             {sessions.map(session => (
               <div
                 key={session.id}
-                className="bg-navy-rich/40 border border-gray-warm/20 rounded-lg p-5 hover:border-gray-warm/50 transition-all cursor-pointer group"
+                className="bg-navy-rich border border-navy-rich rounded-lg p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer group"
                 onClick={() => router.push(`/session/${session.id}?clientName=${encodeURIComponent(session.clientName)}&clientEmail=${encodeURIComponent(session.clientEmail)}&start=${encodeURIComponent(session.start)}&duration=${session.duration}`)}
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="font-semibold text-espresso text-base">{session.clientName}</p>
-                    <p className="text-espresso/70 text-xs mt-1">{session.clientEmail}</p>
+                    <p className="font-semibold text-cream text-base">{session.clientName}</p>
+                    <p className="text-gray-warm text-xs mt-1">{session.clientEmail}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-espresso text-sm font-medium">{formatDate(session.start)}</p>
-                    <p className="text-espresso/60 text-xs mt-0.5">{formatTime(session.start)} · {session.duration} min</p>
+                    <p className="text-cream text-sm font-medium">{formatDate(session.start)}</p>
+                    <p className="text-gray-warm text-xs mt-0.5">{formatTime(session.start)} · {session.duration} min</p>
                   </div>
                 </div>
                 <div className="mt-4 flex items-center justify-between">
-                  <p className="text-espresso/60 text-xs truncate">{session.title}</p>
+                  <p className="text-gray-warm text-xs truncate">{session.title}</p>
                   <span className="text-[9px] tracking-[3px] uppercase text-gray-warm group-hover:text-cream transition-colors ml-4 whitespace-nowrap">
                     Generate Prep →
                   </span>
