@@ -1,4 +1,4 @@
-export function TLWLogo({ size = 40, light = false }: { size?: number; light?: boolean }) {
+export function TLWLogo({ size = 40, light = false, onClick, style, className }: { size?: number; light?: boolean; onClick?: () => void; style?: React.CSSProperties; className?: string }) {
   const squareColor = light ? '#F2F2F0' : '#0C1940'
   const plusColor = '#8B8680'
 
